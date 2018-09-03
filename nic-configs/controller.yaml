@@ -97,48 +97,48 @@ resources:
                   ip_netmask: 169.254.169.254/32
                   next_hop: {get_param: EC2MetadataIp}
             - 
-              type: ovs_bridge
-              name: br-api
+              type: interface
+              name: ens10f1
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
-              members:
-                -
-                  type: interface
-                  name: ens10f1
+              #members:
+              #  -
+              #    type: interface
+              #    name: ens10f1
                   # force the MAC address of the bridge to this interface
-                  primary: true
+                  # primary: true
             -
               type: vlan
               vlan_id: {get_param: InternalApiNetworkVlanID}
-              device: br-api
+              device: ens10f1
               addresses:
                 -
                   ip_netmask: {get_param: InternalApiIpSubnet}
             -
               type: vlan
               vlan_id: {get_param: TenantNetworkVlanID}
-              device: br-api
+              device: ens10f1
               addresses:
                 -
                   ip_netmask: {get_param: TenantIpSubnet}
             -
               type: vlan
               vlan_id: {get_param: StorageNetworkVlanID}
-              device: br-api
+              device: ens10f1
               addresses:
                 -
                   ip_netmask: {get_param: StorageIpSubnet}
             -
               type: vlan
               vlan_id: {get_param: StorageMgmtNetworkVlanID}
-              device: br-api
+              device: ens10f1
               addresses:
                 -
                   ip_netmask: {get_param: StorageMgmtIpSubnet}
             -
               type: vlan
               vlan_id: {get_param: ExternalNetworkVlanID}
-              device: br-api
+              device: ens10f1
               addresses:
               -
                 ip_netmask: {get_param: ExternalIpSubnet}
@@ -152,27 +152,27 @@ resources:
               use_dhcp: false
               mtu: 9000
               members:
-                type: ovs_bond
-                name: bond0
-                use_dhcp: true
-                members:
-                  -
-                    type: interface
-                    name: ens20f0
-                    mtu: 9000
-                  -
-                    type: interface
-                    name: ens20f1
-                    use_dhcp: true
-                    mtu: 9000
-            -
-              type: vlan
-              vlan_id: {get_param: TenantNetworkVlanID}
-              device: bond0
-              mtu: 9000
-              addresses:
                 -
-                  ip_netmask: {get_param: TenantIpSubnet}
+                  type: ovs_bond
+                  name: bond0
+                  use_dhcp: true
+                  members:
+                    -
+                      type: interface
+                      name: ens20f0
+                      mtu: 9000
+                    -
+                      type: interface
+                      name: ens20f1
+                      mtu: 9000
+                -
+                  type: vlan
+                  vlan_id: {get_param: TenantNetworkVlanID}
+                  device: bond0
+                  mtu: 9000
+                  addresses:
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
 
 outputs:
   OS::stack_id:

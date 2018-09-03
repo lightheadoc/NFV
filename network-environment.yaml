@@ -3,9 +3,12 @@ resource_registry:
   OS::TripleO::SriovCompute::Net::SoftwareConfig: nic-configs/compute-sriov.yaml
   OS::TripleO::DpdkCompute::Net::SoftwareConfig: nic-configs/compute-dpdk.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: nic-configs/controller.yaml
+  #OS::TripleO::Compute::Net::SoftwareConfig: nic-configs/compute-dpdksriov.yaml
   OS::TripleO::NodeUserData: first-boot-sriov.yaml
   OS::TripleO::NodeUserData: first-boot-dpdk.yaml
   OS::TripleO::NodeExtraConfigPost: post-install-dpdk.yaml
+  #OS::TripleO::NodeUserData: first-boot-dpdksriov.yaml
+  #OS::TripleO::NodeExtraConfigPost: post-install-dpdksriov.yaml
 
 parameter_defaults:
   # Customize all these values to match the local environment
@@ -42,13 +45,16 @@ parameter_defaults:
   # The tenant network type for Neutron (vlan or vxlan).
   NeutronNetworkType: 'vlan'
   # The OVS logical->physical bridge mappings to use.
-  NeutronBridgeMappings: 'datacentre:br-api,dpdk_mgmt:br-link0,tenant:br-link1'
+  NeutronBridgeMappings: 'tenant:br-link0'
   # The Neutron ML2 and OpenVSwitch vlan mapping range to support.
-  NeutronNetworkVLANRanges: 'datacentre:1:300,dpdk_mgmt:400:400,tenant:422:422,tenant:424:424'
+  NeutronNetworkVLANRanges: 'datacentre:1:300,tenant:400:400,tenant:422:422,tenant:424:424'
   # Nova flavor to use.
   OvercloudControlFlavor: control
   OvercloudSriovComputeFlavor: sriovcompute
   OvercloudDpdkComputeFlavor: dpdkcompute
+  
+  OvercloudComputeFlavor: compute
+  
   #Number of nodes to deploy.
   ControllerCount: 3
   SriovComputeCount: 1
@@ -104,7 +110,7 @@ parameter_defaults:
     - devname: "ens6f1"
       physical_network: "tenant"
 
-  NeutronPhysicalDevMappings: "tenant:ens6f0,tenant:ens6f1"
+  NeutronPhysicalDevMappings: "datacentre:ens10f1,datacentre:ens3f1,tenant:ens6f0,tenant:ens6f1"
   NeutronSriovNumVFs: "ens6f0:10,ens6f1:10"
   NeutronEnableIsolatedMetadata: true
   NeutronEnableForceMetadata: true

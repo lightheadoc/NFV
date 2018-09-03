@@ -68,7 +68,7 @@ resource_registry:
   OS::TripleO::DpdkCompute::Ports::TenantPort: ../network/ports/tenant.yaml
   #OS::TripleO::DpdkCompute::Ports::ManagementPort: ../network/ports/management.yaml
 
-  # Port assignments for the compute role
+  # Port assignments for the sriovcompute role
   OS::TripleO::SriovCompute::Ports::ExternalPort: ../network/ports/noop.yaml
   OS::TripleO::SriovCompute::Ports::InternalApiPort: ../network/ports/internal_api.yaml
   OS::TripleO::SriovCompute::Ports::StoragePort: ../network/ports/storage.yaml
